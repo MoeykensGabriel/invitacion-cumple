@@ -1,46 +1,85 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabase'; // <--- IMPORTANTE: Importar Supabase
 
 export default function Login() {
     const [nombre, setNombre] = useState('');
+    const [cargando, setCargando] = useState(false); // Para mostrar feedback visual
     const navigate = useNavigate();
 
-    const entrar = () => {
-        if (!nombre.trim()) return alert("Por favor escribí tu nombre");
-        localStorage.setItem('invitado_nombre', nombre);
-        navigate('/invitacion');
+    const ingresar = async (e) => {
+        e.preventDefault();
+        if (!nombre.trim()) return alert("Porfa poné tu nombre");
+
+        setCargando(true);
+        const nombreLimpio = nombre.trim(); // Quitamos espacios accidentales al final
+
+        // 1. Guardamos el nombre en el navegador
+        localStorage.setItem('invitado_nombre', nombreLimpio);
+
+        // 2. PREGUNTAMOS A LA BASE DE DATOS: "¿Ya existe alguien con este nombre?"
+        // Usamos 'ilike' para que no importe si escribe "Alejo" o "alejo" (ignora mayúsculas)
+        const { data, error } = await supabase
+            .from('invitados')
+            .select('asistencia')
+            .ilike('nombre', nombreLimpio)
+            .maybeSingle(); // maybeSingle devuelve null si no existe (en vez de error)
+
+        setCargando(false);
+
+        // 3. DECISIÓN DE RUTAS
+        if (data && data.asistencia) {
+            // CASO A: YA EXISTE y ya confirmó -> Lo mandamos directo al final
+            // (Así no puede duplicar su registro)
+            navigate('/gracias');
+        } else {
+            // CASO B: ES NUEVO (o no terminó de confirmar) -> Al formulario
+            navigate('/invitacion');
+        }
     };
 
     return (
-        <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center">
+        <div className="min-h-screen bg-neutral-900 text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            {/* Fondo con ruido */}
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
-            <div className="z-10 w-full max-w-md flex flex-col gap-8">
-                <div className="space-y-2">
-                    <p className="text-red-600 font-bold tracking-widest text-xs md:text-sm">001_IDENTIFICACIÓN</p>
-                    {/* Título adaptable: más chico en celular (4xl), grande en PC (5xl) */}
-                    <h1 className="text-4xl md:text-5xl font-black text-red-600 uppercase tracking-tighter" style={{ fontFamily: 'Arial, sans-serif' }}>
-                        ¿QUIÉN SOS?
+            <div className="z-10 w-full max-w-sm space-y-8 animate-fade-in-up text-center">
+
+                {/* Títulos */}
+                <div>
+                    <p className="text-red-600 font-bold text-xs tracking-[0.3em] uppercase mb-2">Exclusive Access</p>
+                    <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
+                        PARTY <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 to-neutral-600">TIME</span>
                     </h1>
                 </div>
 
-                <div className="space-y-4 px-4">
-                    <label className="text-gray-400 text-xs md:text-sm tracking-widest uppercase">Tu nombre completo</label>
-                    <input
-                        type="text"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                        className="w-full bg-transparent border-b border-gray-600 text-white text-center text-xl md:text-2xl py-2 focus:outline-none focus:border-red-600 transition-colors placeholder-gray-700"
-                        placeholder="Ej: Gabo"
-                    />
-                </div>
+                {/* Formulario de Login */}
+                <form onSubmit={ingresar} className="space-y-4">
+                    <div className="relative group">
+                        <input
+                            type="text"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                            placeholder="TU NOMBRE Y APELLIDO"
+                            className="w-full bg-neutral-800 border border-neutral-700 text-center text-lg font-bold text-white py-4 rounded-xl focus:outline-none focus:border-red-600 focus:bg-neutral-800/80 transition-all placeholder-gray-600 uppercase"
+                            autoFocus
+                        />
+                        {/* Decoración borde brillante */}
+                        <div className="absolute inset-0 rounded-xl border border-red-600 opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none"></div>
+                    </div>
 
-                <button
-                    onClick={entrar}
-                    className="mt-4 bg-neutral-800 text-white border border-gray-700 py-4 px-8 tracking-widest hover:bg-red-600 hover:border-red-600 transition-all duration-300 uppercase font-bold text-sm md:text-base w-full md:w-auto self-center"
-                >
-                    Ingresar
-                </button>
+                    <button
+                        type="submit"
+                        disabled={cargando}
+                        className="w-full bg-white text-black font-black py-4 rounded-xl uppercase tracking-widest hover:bg-gray-200 transition-all active:scale-95 disabled:opacity-50"
+                    >
+                        {cargando ? "Verificando..." : "INGRESAR"}
+                    </button>
+                </form>
+
+                <p className="text-[10px] text-gray-600 font-mono uppercase">
+                    Sistema de Confirmación v2.0
+                </p>
             </div>
         </div>
     );
