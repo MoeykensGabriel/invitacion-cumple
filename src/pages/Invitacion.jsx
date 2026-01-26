@@ -24,6 +24,49 @@ export default function Invitacion() {
         }
     }, []);
 
+    // Componente Cuenta Regresiva
+    function Countdown({ targetDate }) {
+        const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+        function calculateTimeLeft() {
+            const difference = +new Date(targetDate) - +new Date();
+            let timeLeft = {};
+
+            if (difference > 0) {
+                timeLeft = {
+                    dias: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                    hs: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    min: Math.floor((difference / 1000 / 60) % 60),
+                    seg: Math.floor((difference / 1000) % 60),
+                };
+            }
+            return timeLeft;
+        }
+
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setTimeLeft(calculateTimeLeft());
+            }, 1000);
+            return () => clearTimeout(timer);
+        });
+
+        const timeComponents = [];
+        Object.keys(timeLeft).forEach((interval) => {
+            timeComponents.push(
+                <div key={interval} className="flex flex-col items-center mx-2 md:mx-4">
+                    <span className="text-2xl md:text-4xl font-black text-white">{timeLeft[interval]}</span>
+                    <span className="text-[10px] uppercase text-gray-500 tracking-widest">{interval}</span>
+                </div>
+            );
+        });
+
+        return (
+            <div className="flex justify-center py-6 bg-neutral-800/50 rounded-xl border border-neutral-700 my-6 backdrop-blur-sm">
+                {timeComponents.length ? timeComponents : <span>¡Llegó el día!</span>}
+            </div>
+        );
+    }
+
     const verificarSiYaConfirmo = async (nombreUser) => {
         const { data } = await supabase
             .from('invitados')
@@ -95,6 +138,7 @@ export default function Invitacion() {
                         <p className="text-gray-500 text-[10px] md:text-xs font-bold tracking-widest mb-1">FECHA</p>
                         <p className="text-2xl md:text-3xl font-black uppercase">15 MARZO</p>
                         <p className="text-sm text-gray-400">22:00 HS</p>
+                        <Countdown targetDate="2026-03-15T22:00:00" />
                     </div>
                     <div className="text-4xl grayscale opacity-50">📅</div>
                 </div>
