@@ -12,7 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Ruta principal: La pantalla de "¿Quién sos?" */}
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
 
         {/* Ruta de la fiesta (donde irán después de poner el nombre) */}
         <Route path="/invitacion" element={<Invitacion />} />
