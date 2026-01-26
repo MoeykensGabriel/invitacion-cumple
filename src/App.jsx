@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Invitacion from './pages/Invitacion';
 import Dashboard from './pages/Dashboard';
+import Gracias from './pages/Gracias';
 
 // Creamos un componente vacío temporal para que no tire error la ruta
 const Admin = () => <div className="h-screen bg-white p-10"><h1>Acá va el panel de admin...</h1></div>;
@@ -15,6 +16,7 @@ function App() {
 
         {/* Ruta de la fiesta (donde irán después de poner el nombre) */}
         <Route path="/invitacion" element={<Invitacion />} />
+        <Route path="/gracias" element={<Gracias />} />
 
         {/* Ruta del administrador */}
 
