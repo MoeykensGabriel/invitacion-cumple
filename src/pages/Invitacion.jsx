@@ -118,6 +118,20 @@ export default function Invitacion() {
         window.open(`https://www.google.com/maps/search/?api=1&query=${direccion}`, '_blank');
     };
 
+    const agendarCalendario = () => {
+        const titulo = encodeURIComponent("Cumple de Alejo 🎉");
+        const detalles = encodeURIComponent("¡No te olvides! Festejamos en Salón Los Álamos. Trae tu mejor onda.");
+        const ubicacion = encodeURIComponent("Salón Los Álamos, Av. Perón 1200, Tucumán");
+        // Fechas en formato YYYYMMDDTHHMMSSZ (Ojo con la zona horaria, esto es UTC aprox, ajustalo si hace falta)
+        // Para 15 Marzo 2026 22:00hs Arg
+        const inicio = "20260316T010000Z";
+        const fin = "20260316T090000Z";
+
+        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${titulo}&details=${detalles}&location=${ubicacion}&dates=${inicio}/${fin}`;
+
+        window.open(url, '_blank');
+    };
+
     return (
         <div className="min-h-screen bg-neutral-900 text-white pb-20 relative overflow-hidden font-sans">
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
@@ -140,7 +154,15 @@ export default function Invitacion() {
                         <p className="text-sm text-gray-400">22:00 HS</p>
                         <Countdown targetDate="2026-03-15T22:00:00" />
                     </div>
-                    <div className="text-4xl grayscale opacity-50">📅</div>
+                    <div className="flex flex-col items-center">
+                        <div className="text-4xl grayscale opacity-50 mb-2"></div>
+                        <button
+                            onClick={agendarCalendario}
+                            className="text-xs text-red-600 font-bold border border-red-600 px-3 py-1 rounded-full hover:bg-red-600 hover:text-white transition-colors"
+                        >
+                            AGENDAR 📅
+                        </button>
+                    </div>
                 </div>
 
                 {/* UBICACIÓN (¡AQUÍ ESTÁ!) */}
@@ -187,7 +209,7 @@ export default function Invitacion() {
                                             : 'bg-neutral-800 text-gray-400 hover:bg-neutral-700'}
                   `}
                                 >
-                                    CON PAREJA (+1)
+                                    CON ACOMPAÑANTE
                                 </button>
                             </div>
                         </div>
