@@ -1,73 +1,62 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabase'; // <--- IMPORTANTE: Importar Supabase
+import { supabase } from '../supabase';
 
 export default function Login() {
     const [nombre, setNombre] = useState('');
-    const [cargando, setCargando] = useState(false); // Para mostrar feedback visual
+    const [cargando, setCargando] = useState(false);
     const navigate = useNavigate();
 
     const ingresar = async (e) => {
         e.preventDefault();
-        if (!nombre.trim()) return alert("Porfa poné tu nombre");
+        if (!nombre.trim()) return alert("Por favor poné tu nombre");
 
         setCargando(true);
-        const nombreLimpio = nombre.trim(); // Quitamos espacios accidentales al final
+        const nombreLimpio = nombre.trim();
 
-        // 1. Guardamos el nombre en el navegador
+        // 1. Guardamos nombre en navegador
         localStorage.setItem('invitado_nombre', nombreLimpio);
 
-        // 2. PREGUNTAMOS A LA BASE DE DATOS: "¿Ya existe alguien con este nombre?"
-        // Usamos 'ilike' para que no importe si escribe "Alejo" o "alejo" (ignora mayúsculas)
-        const { data, error } = await supabase
+        // 2. CONSULTAMOS A SUPABASE: ¿Este nombre ya confirmó?
+        const { data } = await supabase
             .from('invitados')
             .select('asistencia')
-            .ilike('nombre', nombreLimpio)
-            .maybeSingle(); // maybeSingle devuelve null si no existe (en vez de error)
+            .ilike('nombre', nombreLimpio) // ilike ignora mayúsculas/minúsculas
+            .maybeSingle();
 
         setCargando(false);
 
-        // 3. DECISIÓN DE RUTAS
+        // 3. DECIDIMOS A DÓNDE VA
         if (data && data.asistencia) {
-            // CASO A: YA EXISTE y ya confirmó -> Lo mandamos directo al final
-            // (Así no puede duplicar su registro)
+            // SI YA EXISTE Y CONFIRMÓ -> Lo mandamos directo al final (No lo dejamos registrarse de nuevo)
+            console.log("Usuario ya registrado, redirigiendo...");
             navigate('/gracias');
         } else {
-            // CASO B: ES NUEVO (o no terminó de confirmar) -> Al formulario
+            // SI ES NUEVO -> Lo mandamos al formulario
             navigate('/invitacion');
         }
     };
 
     return (
         <div className="min-h-screen bg-neutral-900 text-white flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            {/* Fondo con ruido */}
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
-            <div className="z-10 w-full max-w-sm space-y-8 animate-fade-in-up text-center">
-
-                {/* Títulos */}
+            <div className="z-10 w-full max-w-sm space-y-8 text-center animate-fade-in-up">
                 <div>
-                    <p className="text-red-600 font-bold text-xs tracking-[0.3em] uppercase mb-2">Exclusive Access</p>
+                    <p className="text-red-600 font-bold text-xs tracking-[0.3em] uppercase mb-2">Bienvenido a</p>
                     <h1 className="text-5xl font-black uppercase tracking-tighter leading-none">
-                        PARTY <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 to-neutral-600">TIME</span>
+                        ALEJO <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 to-neutral-600">FEST</span>
                     </h1>
                 </div>
 
-                {/* Formulario de Login */}
                 <form onSubmit={ingresar} className="space-y-4">
-                    <div className="relative group">
-                        <input
-                            type="text"
-                            value={nombre}
-                            onChange={(e) => setNombre(e.target.value)}
-                            placeholder="TU NOMBRE Y APELLIDO"
-                            className="w-full bg-neutral-800 border border-neutral-700 text-center text-lg font-bold text-white py-4 rounded-xl focus:outline-none focus:border-red-600 focus:bg-neutral-800/80 transition-all placeholder-gray-600 uppercase"
-                            autoFocus
-                        />
-                        {/* Decoración borde brillante */}
-                        <div className="absolute inset-0 rounded-xl border border-red-600 opacity-0 group-hover:opacity-20 transition-opacity pointer-events-none"></div>
-                    </div>
-
+                    <input
+                        type="text"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        placeholder="TU NOMBRE Y APELLIDO"
+                        className="w-full bg-neutral-800 border border-neutral-700 text-center text-lg font-bold text-white py-4 rounded-xl focus:outline-none focus:border-red-600 uppercase placeholder-gray-600"
+                    />
                     <button
                         type="submit"
                         disabled={cargando}
@@ -76,10 +65,6 @@ export default function Login() {
                         {cargando ? "Verificando..." : "INGRESAR"}
                     </button>
                 </form>
-
-                <p className="text-[10px] text-gray-600 font-mono uppercase">
-                    Sistema de Confirmación v2.0
-                </p>
             </div>
         </div>
     );
