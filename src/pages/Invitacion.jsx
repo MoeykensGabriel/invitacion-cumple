@@ -1,71 +1,75 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form'; // <--- LA HERRAMIENTA PRO
 import { supabase } from '../supabase';
 
-export default function Invitacion() {
+export default function Invitation() {
     const navigate = useNavigate();
-    const [nombre, setNombre] = useState('');
+    const [nombreInvitado, setNombreInvitado] = useState('');
     const [enviando, setEnviando] = useState(false);
-    const [cargando, setCargando] = useState(true); // Para que no parpadee el formulario
+    const [cargando, setCargando] = useState(true);
 
-    // Estados del formulario
-    const [acompanantes, setAcompanantes] = useState(0); // 0 = Solo, 1 = Con Pareja
-    const [nombreAcomp, setNombreAcomp] = useState('');
-    const [telefono, setTelefono] = useState('');
-    const [mensaje, setMensaje] = useState('');
+    // Configuramos el Hook. 
+    // 'register': Para conectar los inputs.
+    // 'handleSubmit': Para manejar el envío.
+    // 'watch': Para "mirar" valores en tiempo real (sirve para mostrar/ocultar el input de pareja).
+    // 'formState': Acá viven los errores.
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        formState: { errors }
+    } = useForm({
+        defaultValues: {
+            acompanantes: "0", // Por defecto va solo
+            telefono: "",
+            mensaje: ""
+        }
+    });
+
+    // "Miramos" el valor de acompañantes para saber si mostrar el input extra
+    const cantidadAcompanantes = watch("acompanantes");
 
     useEffect(() => {
         const nombreGuardado = localStorage.getItem('invitado_nombre');
-
-        // 1. Si no tiene nombre, lo mandamos al Login
         if (!nombreGuardado) {
             navigate('/');
         } else {
-            setNombre(nombreGuardado);
+            setNombreInvitado(nombreGuardado);
             verificarSiYaConfirmo(nombreGuardado);
         }
     }, []);
 
-    // --- LÓGICA DE SEGURIDAD (ANTI DOBLE REGISTRO) ---
     const verificarSiYaConfirmo = async (nombreUser) => {
-        // Preguntamos a la base de datos si este usuario ya existe
         const { data } = await supabase
             .from('invitados')
             .select('asistencia')
-            .ilike('nombre', nombreUser) // 'ilike' ignora mayúsculas/minúsculas
+            .ilike('nombre', nombreUser)
             .maybeSingle();
 
-        // Si la base de datos dice que ya confirmó...
         if (data && data.asistencia) {
-            // ...lo mandamos DIRECTO a la pantalla de Gracias/Ticket
             navigate('/gracias');
         } else {
-            // Si no confirmó, dejamos de cargar y mostramos el formulario
             setCargando(false);
         }
     };
 
-    const confirmarAsistencia = async () => {
-        // Validaciones
-        if (acompanantes === 1 && !nombreAcomp.trim()) {
-            return alert("Por favor escribí el nombre de tu acompañante 🙏");
-        }
-
-        if (!telefono.trim()) {
-            return alert("Por favor dejanos tu WhatsApp por cualquier cambio 📱");
-        }
-
+    // Esta función SOLO se ejecuta si todas las validaciones pasan
+    const onSubmit = async (data) => {
         setEnviando(true);
 
-        // Guardamos en la base de datos
+        // Limpieza de datos antes de enviar
+        const tienePareja = data.acompanantes === "1";
+
         const { error } = await supabase.from('invitados').insert([
             {
-                nombre: nombre,
+                nombre: nombreInvitado,
                 asistencia: true,
-                cantAcomp: acompanantes,
-                nombreAcomp: acompanantes === 1 ? nombreAcomp : null,
-                telefono: telefono,
-                mensaje: mensaje
+                cantAcomp: tienePareja ? 1 : 0,
+                nombreAcomp: tienePareja ? data.nombreAcomp : null, // Si va solo, mandamos null aunque haya escrito algo
+                telefono: data.telefono,
+                mensaje: data.mensaje
             }
         ]);
 
@@ -73,18 +77,15 @@ export default function Invitacion() {
             alert("Error al guardar: " + error.message);
             setEnviando(false);
         } else {
-            // ÉXITO: Lo mandamos a la pantalla final
             navigate('/gracias');
         }
     };
 
-    // Función Mapa Universal
     const abrirMapa = () => {
         const direccion = encodeURIComponent("Salón Los Álamos, Av. Perón 1200, Tucumán");
         window.open(`https://www.google.com/maps/search/?api=1&query=${direccion}`, '_blank');
     };
 
-    // Pantalla de Carga (mientras verifica si ya confirmaste)
     if (cargando) {
         return (
             <div className="min-h-screen bg-neutral-900 flex items-center justify-center">
@@ -97,127 +98,116 @@ export default function Invitacion() {
         <div className="min-h-screen bg-neutral-900 text-white pb-20 relative overflow-hidden font-sans">
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
 
-            {/* Encabezado */}
             <div className="px-6 pt-12 space-y-1 relative z-10">
-                <p className="text-red-600 font-bold text-[10px] md:text-xs tracking-widest">002_INVITACION // {nombre.toUpperCase()}</p>
-                <h1 className="text-5xl md:text-6xl font-black text-red-600 uppercase leading-none tracking-tighter">
-                    EL <br /> EVENTO
-                </h1>
+                <p className="text-red-600 font-bold text-[10px] md:text-xs tracking-widest">002_INVITACION // {nombreInvitado.toUpperCase()}</p>
+                <h1 className="text-5xl md:text-6xl font-black text-red-600 uppercase leading-none tracking-tighter">EL <br /> EVENTO</h1>
             </div>
 
             <div className="mt-8 px-6 space-y-8 relative z-10">
 
-                {/* FECHA */}
+                {/* INFO FECHA */}
                 <div className="flex items-center justify-between border-b border-gray-800 pb-4">
                     <div>
-                        <p className="text-gray-500 text-[10px] md:text-xs font-bold tracking-widest mb-1">FECHA</p>
-                        <p className="text-2xl md:text-3xl font-black uppercase">15 MARZO</p>
-                        <p className="text-sm text-gray-400">22:00 HS</p>
+                        <p className="text-gray-500 text-[10px] font-bold tracking-widest mb-1">FECHA</p>
+                        <p className="text-2xl font-black uppercase">15 MARZO</p>
                     </div>
                     <div className="text-4xl grayscale opacity-50">📅</div>
                 </div>
 
-                {/* UBICACIÓN */}
-                <div className="flex items-center justify-between border-b border-gray-800 pb-4">
-                    <div className="max-w-[75%]">
-                        <p className="text-gray-500 text-[10px] md:text-xs font-bold tracking-widest mb-1">UBICACIÓN</p>
-                        <p className="text-lg md:text-xl font-bold leading-tight">Salón "Los Álamos"</p>
-                        <p className="text-sm text-gray-400">Av. Perón 1200</p>
-                    </div>
+                {/* --- FORMULARIO START --- */}
+                {/* handleSubmit valida todo y si está OK, llama a onSubmit */}
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-fade-in-up pt-4">
 
-                    <button
-                        onClick={abrirMapa}
-                        className="w-12 h-12 bg-neutral-800 rounded-full flex items-center justify-center border border-gray-700 hover:bg-red-600 hover:border-red-600 hover:text-white transition-all active:scale-95 shadow-lg"
-                    >
-                        <span className="text-2xl">📍</span>
-                    </button>
-                </div>
-
-                {/* --- FORMULARIO --- */}
-                <div className="space-y-6 animate-fade-in-up pt-4">
-
-                    {/* 1. SELECCIÓN SIMPLE (SOLO o +1) */}
+                    {/* SELECCIÓN: SOLO o PAREJA */}
                     <div>
-                        <p className="text-gray-500 text-[10px] md:text-xs font-bold tracking-widest mb-3">¿CÓMO VIENES?</p>
+                        <p className="text-gray-500 text-[10px] font-bold tracking-widest mb-3">¿CÓMO VIENES?</p>
                         <div className="grid grid-cols-2 gap-4">
-                            <button
-                                onClick={() => setAcompanantes(0)}
-                                className={`py-4 rounded-xl border border-gray-700 font-bold text-sm md:text-base transition-all
-                  ${acompanantes === 0
-                                        ? 'bg-white text-black border-white shadow-lg shadow-white/20'
-                                        : 'bg-neutral-800 text-gray-400 hover:bg-neutral-700'}
-                `}
-                            >
+                            {/* Opción 0: Solo */}
+                            <label className={`cursor-pointer py-4 rounded-xl border font-bold text-sm text-center transition-all
+                  ${cantidadAcompanantes === "0" ? 'bg-white text-black border-white shadow-lg' : 'bg-neutral-800 text-gray-400 border-gray-700'}`}>
+                                <input
+                                    type="radio"
+                                    value="0"
+                                    className="hidden"
+                                    {...register("acompanantes")} // Conectamos al form
+                                />
                                 VOY SOLO/A
-                            </button>
+                            </label>
 
-                            <button
-                                onClick={() => setAcompanantes(1)}
-                                className={`py-4 rounded-xl border border-gray-700 font-bold text-sm md:text-base transition-all
-                  ${acompanantes === 1
-                                        ? 'bg-red-600 text-white border-red-600 shadow-lg shadow-red-600/30'
-                                        : 'bg-neutral-800 text-gray-400 hover:bg-neutral-700'}
-                `}
-                            >
+                            {/* Opción 1: Con Pareja */}
+                            <label className={`cursor-pointer py-4 rounded-xl border font-bold text-sm text-center transition-all
+                  ${cantidadAcompanantes === "1" ? 'bg-red-600 text-white border-red-600 shadow-lg' : 'bg-neutral-800 text-gray-400 border-gray-700'}`}>
+                                <input
+                                    type="radio"
+                                    value="1"
+                                    className="hidden"
+                                    {...register("acompanantes")}
+                                />
                                 CON PAREJA (+1)
-                            </button>
+                            </label>
                         </div>
                     </div>
 
-                    {/* 2. Nombre del +1 (Solo aparece si elegiste pareja) */}
-                    {acompanantes === 1 && (
+                    {/* INPUT ACOMPAÑANTE (Condicional) */}
+                    {/* Solo se muestra si cantidadAcompanantes es "1" */}
+                    {cantidadAcompanantes === "1" && (
                         <div className="animate-fade-in">
-                            <label className="text-red-400 text-[10px] md:text-xs font-bold tracking-widest mb-2 block">
-                                NOMBRE DE TU ACOMPAÑANTE *
-                            </label>
+                            <label className="text-red-400 text-[10px] font-bold tracking-widest mb-2 block">NOMBRE DE TU ACOMPAÑANTE *</label>
                             <input
                                 type="text"
-                                value={nombreAcomp}
-                                onChange={(e) => setNombreAcomp(e.target.value)}
                                 placeholder="Ej: Julieta / Pedro"
-                                className="w-full bg-neutral-800 border border-gray-700 rounded-xl p-4 text-white focus:border-red-600 focus:outline-none placeholder-gray-600"
+                                className={`w-full bg-neutral-800 border rounded-xl p-4 text-white focus:outline-none transition-colors
+                  ${errors.nombreAcomp ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-red-600'}`}
+                                // ACÁ ESTÁ LA MAGIA DE LA VALIDACIÓN:
+                                {...register("nombreAcomp", {
+                                    required: "Por favor escribí el nombre",
+                                    minLength: { value: 3, message: "Mínimo 3 letras" }
+                                })}
                             />
+                            {errors.nombreAcomp && <p className="text-red-500 text-xs mt-2 font-bold">{errors.nombreAcomp.message}</p>}
                         </div>
                     )}
 
-                    {/* 3. Celular */}
+                    {/* INPUT TELÉFONO (Validación compleja con Regex) */}
                     <div>
-                        <label className="text-gray-500 text-[10px] md:text-xs font-bold tracking-widest mb-2 block">
-                            TU CELULAR (WhatsApp) *
-                        </label>
+                        <label className="text-gray-500 text-[10px] font-bold tracking-widest mb-2 block">TU CELULAR (WhatsApp) *</label>
                         <input
                             type="tel"
-                            value={telefono}
-                            onChange={(e) => setTelefono(e.target.value)}
-                            placeholder="Ej: 381..."
-                            className="w-full bg-neutral-800 border border-gray-700 rounded-xl p-4 text-white focus:border-red-600 focus:outline-none placeholder-gray-600"
+                            placeholder="Ej: 381 123 4567"
+                            className={`w-full bg-neutral-800 border rounded-xl p-4 text-white focus:outline-none transition-colors
+                ${errors.telefono ? 'border-red-500 focus:border-red-500' : 'border-gray-700 focus:border-red-600'}`}
+                            {...register("telefono", {
+                                required: "Necesitamos tu celu para avisarte cambios",
+                                // Esta función valida que haya al menos 10 números reales ignorando espacios/guiones
+                                validate: (value) => {
+                                    const numeros = value.replace(/[^0-9]/g, ''); // Deja solo dígitos
+                                    return numeros.length >= 10 || "El número parece incompleto (mínimo 10 dígitos)";
+                                }
+                            })}
                         />
+                        {errors.telefono && <p className="text-red-500 text-xs mt-2 font-bold">{errors.telefono.message}</p>}
                     </div>
 
-                    {/* 4. Mensaje */}
+                    {/* MENSAJE (Opcional) */}
                     <div>
-                        <label className="text-gray-500 text-[10px] md:text-xs font-bold tracking-widest mb-2 block">
-                            MENSAJE (Comida/Saludos)
-                        </label>
+                        <label className="text-gray-500 text-[10px] font-bold tracking-widest mb-2 block">MENSAJE (Opcional)</label>
                         <textarea
                             rows="2"
-                            value={mensaje}
-                            onChange={(e) => setMensaje(e.target.value)}
-                            placeholder="Soy vegetariano / celíaco..."
-                            className="w-full bg-neutral-800 border border-gray-700 rounded-xl p-4 text-white focus:border-red-600 focus:outline-none placeholder-gray-600 resize-none"
+                            placeholder="Soy vegetariano..."
+                            className="w-full bg-neutral-800 border border-gray-700 rounded-xl p-4 text-white focus:border-red-600 focus:outline-none resize-none"
+                            {...register("mensaje")} // Sin reglas porque es opcional
                         />
                     </div>
 
-                    {/* Botón Final */}
                     <button
-                        onClick={confirmarAsistencia}
+                        type="submit" // Importante que sea type="submit"
                         disabled={enviando}
-                        className="w-full bg-white text-black font-black py-5 uppercase tracking-widest text-sm md:text-base hover:bg-red-600 hover:text-white transition-all duration-300 disabled:opacity-50 active:scale-95 cursor-pointer rounded-xl mt-4 shadow-xl"
+                        className="w-full bg-white text-black font-black py-5 uppercase tracking-widest text-sm rounded-xl mt-4 hover:bg-red-600 hover:text-white transition-all shadow-xl disabled:opacity-50"
                     >
                         {enviando ? "Guardando..." : "CONFIRMAR ASISTENCIA"}
                     </button>
 
-                </div>
+                </form>
             </div>
         </div>
     );
