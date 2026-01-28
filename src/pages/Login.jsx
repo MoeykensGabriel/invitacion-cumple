@@ -123,9 +123,9 @@ export default function Login() {
 
                     {/* Footer decorativo */}
                     <div className="mt-8 flex justify-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce"></div>
-                        <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce delay-200"></div>
+                        <div className="w-2 h-2 rounded-full bg-red-600"></div>
+                        <div className="w-2 h-2 rounded-full bg-red-600"></div>
+                        <div className="w-2 h-2 rounded-full bg-red-600"></div>
                     </div>
                 </div>
             </div>

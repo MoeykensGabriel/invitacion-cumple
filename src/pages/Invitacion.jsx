@@ -341,7 +341,9 @@ export default function Invitation() {
 
                     {/* Footer decorativo */}
                     <div className="mt-8 flex justify-center gap-2">
-
+                        <div className="w-2 h-2 rounded-full bg-red-600"></div>
+                        <div className="w-2 h-2 rounded-full bg-red-600"></div>
+                        <div className="w-2 h-2 rounded-full bg-red-600"></div>
                     </div>
                 </div>
             </div>
