@@ -41,12 +41,12 @@ export default function Gracias() {
     }, []);
 
     const agendar = () => {
-        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Cumple Alejo")}&dates=20260316T010000Z/20260316T090000Z&details=${encodeURIComponent("Fiesta en Los Álamos")}&location=${encodeURIComponent("Salón Los Álamos, Tucumán")}`;
+        const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Cumple Alejo 🎉")}&dates=20260316T010000Z/20260316T090000Z&details=${encodeURIComponent("Fiesta en Los Álamos")}&location=${encodeURIComponent("Salón Los Álamos, Tucumán")}`;
         window.open(url, '_blank');
     };
 
     return (
-        <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center p-4 relative overflow-hidden font-sans">
             {/* Fondo animado con gradiente */}
             <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 via-neutral-800 to-black"></div>
 
@@ -59,13 +59,13 @@ export default function Gracias() {
 
             {/* Contenido principal */}
             <div className="relative z-10 w-full max-w-lg">
-                <div className="bg-neutral-800/50 backdrop-blur-xl border border-neutral-700/50 rounded-3xl p-8 md:p-12 shadow-2xl">
+                <div className="bg-neutral-800/50 backdrop-blur-xl border border-neutral-700/50 rounded-3xl p-6 md:p-12 shadow-2xl">
 
                     {/* Badge superior */}
                     <div className="text-center mb-8 animate-fade-in">
                         <div className="inline-block">
                             <div className="bg-red-600/10 border border-red-600/30 rounded-full px-6 py-2">
-                                <p className="text-red-500 font-bold text-xs tracking-[0.3em] uppercase">
+                                <p className="text-red-500 font-bold text-[10px] md:text-xs tracking-[0.3em] uppercase">
                                     003_CONFIRMACIÓN
                                 </p>
                             </div>
@@ -76,9 +76,9 @@ export default function Gracias() {
                     <div className="text-center mb-8 animate-slide-up">
                         <div className="relative inline-block">
                             <div className="absolute inset-0 bg-red-600 blur-3xl opacity-30 animate-pulse"></div>
-                            <div className="relative w-24 h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-neutral-900/50">
+                            <div className="relative w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-red-600 to-red-800 rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-neutral-900/50">
                                 <svg
-                                    className="w-12 h-12 text-white animate-check"
+                                    className="w-10 h-10 md:w-12 md:h-12 text-white animate-check"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -95,16 +95,16 @@ export default function Gracias() {
                     </div>
 
                     {/* Título principal */}
-                    <div className="text-center space-y-4 mb-10 animate-fade-in-up">
-                        <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                    <div className="text-center space-y-2 md:space-y-4 mb-8 md:mb-10 animate-fade-in-up">
+                        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
                             ESTÁS
                         </h1>
-                        <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                        <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-red-600 to-red-700 animate-gradient">
                                 ADENTRO
                             </span>
                         </h1>
-                        <p className="text-neutral-400 font-bold text-lg mt-4">
+                        <p className="text-neutral-400 font-bold text-base md:text-lg mt-4">
                             Grande, <span className="text-white">{nombre}</span>
                         </p>
                     </div>
@@ -117,53 +117,54 @@ export default function Gracias() {
                     </div>
 
                     {/* Contador en tiempo real */}
-                    <div className="bg-neutral-900/50 backdrop-blur-sm rounded-2xl p-6 border border-neutral-700/50 mb-6 animate-fade-in-up delay-300">
+                    <div className="bg-neutral-900/50 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-neutral-700/50 mb-6 animate-fade-in-up delay-300">
                         <div className="text-center mb-6">
                             <div className="inline-block bg-red-600/10 border border-red-600/30 rounded-full px-5 py-2">
-                                <p className="text-red-500 font-bold text-xs tracking-[0.25em] uppercase">
+                                <p className="text-red-500 font-bold text-[10px] md:text-xs tracking-[0.25em] uppercase">
                                     Cuenta Regresiva
                                 </p>
                             </div>
                         </div>
 
-                        {/* Grid del contador */}
-                        <div className="grid grid-cols-4 gap-3 mb-6">
+                        {/* Grid del contador (CORREGIDO PARA CELULARES) */}
+                        <div className="grid grid-cols-4 gap-2 md:gap-3 mb-6">
+
                             {/* Días */}
-                            <div className="bg-neutral-800/80 rounded-xl p-4 border border-neutral-700/50 transform hover:scale-105 transition-all">
-                                <div className="text-3xl md:text-4xl font-black text-white tabular-nums">
+                            <div className="bg-neutral-800/80 rounded-xl p-2 md:p-4 border border-neutral-700/50 transform hover:scale-105 transition-all flex flex-col items-center justify-center">
+                                <div className="text-xl sm:text-2xl md:text-4xl font-black text-white tabular-nums">
                                     {String(tiempoRestante.dias).padStart(2, '0')}
                                 </div>
-                                <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
+                                <div className="text-[10px] md:text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
                                     Días
                                 </div>
                             </div>
 
                             {/* Horas */}
-                            <div className="bg-neutral-800/80 rounded-xl p-4 border border-neutral-700/50 transform hover:scale-105 transition-all">
-                                <div className="text-3xl md:text-4xl font-black text-white tabular-nums">
+                            <div className="bg-neutral-800/80 rounded-xl p-2 md:p-4 border border-neutral-700/50 transform hover:scale-105 transition-all flex flex-col items-center justify-center">
+                                <div className="text-xl sm:text-2xl md:text-4xl font-black text-white tabular-nums">
                                     {String(tiempoRestante.horas).padStart(2, '0')}
                                 </div>
-                                <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
-                                    Horas
+                                <div className="text-[10px] md:text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
+                                    Hs
                                 </div>
                             </div>
 
                             {/* Minutos */}
-                            <div className="bg-neutral-800/80 rounded-xl p-4 border border-neutral-700/50 transform hover:scale-105 transition-all">
-                                <div className="text-3xl md:text-4xl font-black text-red-500 tabular-nums animate-pulse-subtle">
+                            <div className="bg-neutral-800/80 rounded-xl p-2 md:p-4 border border-neutral-700/50 transform hover:scale-105 transition-all flex flex-col items-center justify-center">
+                                <div className="text-xl sm:text-2xl md:text-4xl font-black text-red-500 tabular-nums animate-pulse-subtle">
                                     {String(tiempoRestante.minutos).padStart(2, '0')}
                                 </div>
-                                <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
+                                <div className="text-[10px] md:text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
                                     Min
                                 </div>
                             </div>
 
                             {/* Segundos */}
-                            <div className="bg-neutral-800/80 rounded-xl p-4 border border-neutral-700/50 transform hover:scale-105 transition-all">
-                                <div className="text-3xl md:text-4xl font-black text-red-600 tabular-nums">
+                            <div className="bg-neutral-800/80 rounded-xl p-2 md:p-4 border border-neutral-700/50 transform hover:scale-105 transition-all flex flex-col items-center justify-center">
+                                <div className="text-xl sm:text-2xl md:text-4xl font-black text-red-600 tabular-nums">
                                     {String(tiempoRestante.segundos).padStart(2, '0')}
                                 </div>
-                                <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
+                                <div className="text-[10px] md:text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
                                     Seg
                                 </div>
                             </div>
@@ -172,14 +173,14 @@ export default function Gracias() {
                         {/* Info del evento */}
                         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-neutral-700/50">
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-black text-white">15</div>
-                                <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
+                                <div className="text-xl md:text-3xl font-black text-white">15</div>
+                                <div className="text-[10px] md:text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
                                     Marzo 2026
                                 </div>
                             </div>
                             <div className="text-center">
-                                <div className="text-2xl md:text-3xl font-black text-white">22:00</div>
-                                <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
+                                <div className="text-xl md:text-3xl font-black text-white">22:00</div>
+                                <div className="text-[10px] md:text-xs text-neutral-400 uppercase font-bold tracking-wider mt-1">
                                     Horas
                                 </div>
                             </div>
@@ -192,7 +193,7 @@ export default function Gracias() {
                         className="relative w-full group overflow-hidden animate-fade-in-up delay-500"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-white via-neutral-100 to-white bg-[length:200%_100%] animate-shimmer"></div>
-                        <div className="relative bg-white text-black font-black py-5 rounded-2xl uppercase tracking-widest transition-all active:scale-95 shadow-xl group-hover:shadow-2xl text-sm md:text-base">
+                        <div className="relative bg-white text-black font-black py-4 md:py-5 rounded-2xl uppercase tracking-widest transition-all active:scale-95 shadow-xl group-hover:shadow-2xl text-xs md:text-base">
                             <span className="flex items-center justify-center gap-3">
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -203,7 +204,7 @@ export default function Gracias() {
                     </button>
 
                     {/* Footer */}
-                    <p className="text-center text-neutral-500 text-xs font-bold tracking-wider mt-8 uppercase animate-fade-in-up delay-700">
+                    <p className="text-center text-neutral-500 text-[10px] md:text-xs font-bold tracking-wider mt-8 uppercase animate-fade-in-up delay-700">
                         Te esperamos para festejar juntos
                     </p>
 

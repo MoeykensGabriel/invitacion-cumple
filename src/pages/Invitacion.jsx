@@ -161,8 +161,8 @@ export default function Invitation() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <label className={`group cursor-pointer relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-[1.02] ${cantidadAcompanantes === "0"
-                                        ? 'bg-white text-black shadow-2xl'
-                                        : 'bg-neutral-900/80 text-neutral-400 border-2 border-neutral-700/50 hover:border-neutral-600'
+                                    ? 'bg-white text-black shadow-2xl'
+                                    : 'bg-neutral-900/80 text-neutral-400 border-2 border-neutral-700/50 hover:border-neutral-600'
                                     }`}>
                                     {cantidadAcompanantes === "0" && (
                                         <div className="absolute inset-0 bg-gradient-to-r from-white via-neutral-100 to-white bg-[length:200%_100%] animate-shimmer"></div>
@@ -184,8 +184,8 @@ export default function Invitation() {
                                 </label>
 
                                 <label className={`group cursor-pointer relative overflow-hidden rounded-2xl transition-all duration-300 transform hover:scale-[1.02] ${cantidadAcompanantes === "1"
-                                        ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-2xl shadow-red-600/20'
-                                        : 'bg-neutral-900/80 text-neutral-400 border-2 border-neutral-700/50 hover:border-neutral-600'
+                                    ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-2xl shadow-red-600/20'
+                                    : 'bg-neutral-900/80 text-neutral-400 border-2 border-neutral-700/50 hover:border-neutral-600'
                                     }`}>
                                     {cantidadAcompanantes === "1" && (
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent bg-[length:200%_100%] animate-shimmer"></div>
@@ -222,8 +222,8 @@ export default function Invitation() {
                                         type="text"
                                         placeholder="Ej: Julieta / Pedro"
                                         className={`relative w-full bg-neutral-900 border-2 p-5 rounded-2xl text-white font-semibold focus:outline-none focus:ring-2 transition-all duration-300 ${errors.nombreAcomp
-                                                ? 'border-red-500 focus:border-red-500 focus:ring-red-600/20'
-                                                : 'border-neutral-700 focus:border-red-600 focus:ring-red-600/20'
+                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-600/20'
+                                            : 'border-neutral-700 focus:border-red-600 focus:ring-red-600/20'
                                             }`}
                                         {...register("nombreAcomp", {
                                             required: "Por favor escribí el nombre",
@@ -255,8 +255,8 @@ export default function Invitation() {
                                     type="tel"
                                     placeholder="Ej: 381 123 4567"
                                     className={`relative w-full bg-neutral-900 border-2 p-5 rounded-2xl text-white font-semibold focus:outline-none focus:ring-2 transition-all duration-300 ${errors.telefono
-                                            ? 'border-red-500 focus:border-red-500 focus:ring-red-600/20'
-                                            : 'border-neutral-700 focus:border-red-600 focus:ring-red-600/20'
+                                        ? 'border-red-500 focus:border-red-500 focus:ring-red-600/20'
+                                        : 'border-neutral-700 focus:border-red-600 focus:ring-red-600/20'
                                         }`}
                                     {...register("telefono", {
                                         required: "Campo obligatorio",
@@ -341,9 +341,7 @@ export default function Invitation() {
 
                     {/* Footer decorativo */}
                     <div className="mt-8 flex justify-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce"></div>
-                        <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 rounded-full bg-red-600 animate-bounce delay-200"></div>
+
                     </div>
                 </div>
             </div>
