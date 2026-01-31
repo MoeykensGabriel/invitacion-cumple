@@ -26,7 +26,7 @@ export default function Ticket() {
                     {/* Cabecera Roja */}
                     <div className="bg-red-600 p-6 text-center">
                         <p className="text-white/80 font-bold text-[10px] tracking-[0.3em] uppercase mb-1">OFFICIAL ACCESS</p>
-                        <h1 className="text-2xl font-black text-white uppercase tracking-tighter">ALEJO FEST</h1>
+                        <h1 className="text-2xl font-black text-white uppercase tracking-tighter">PARTY TIME</h1>
                     </div>
 
                     {/* Cuerpo del Ticket */}
