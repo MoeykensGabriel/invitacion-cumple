@@ -388,7 +388,7 @@ export default function Dashboard() {
                                                 rel="noreferrer"
                                                 className="flex-1 bg-neutral-700 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center hover:bg-neutral-600 transition-colors flex items-center justify-center"
                                             >
-                                                Chat
+                                                Enviar Mensaje
                                             </a>
 
                                             {/* BOTÓN ENVIAR QR (Premium) */}
@@ -401,7 +401,7 @@ export default function Dashboard() {
                                                 rel="noreferrer"
                                                 className="flex-1 bg-white text-black py-3 rounded-xl text-xs font-black uppercase tracking-wider text-center hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
                                             >
-                                                🎟️ Enviar QR
+                                                Enviar QR
                                             </a>
                                         </div>
                                     )}
@@ -496,7 +496,7 @@ export default function Dashboard() {
                                                             rel="noreferrer"
                                                             className="flex-1 bg-neutral-700 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-center hover:bg-neutral-600 transition-colors flex items-center justify-center"
                                                         >
-                                                            Chat
+                                                            Enviar Mensaje
                                                         </a>
 
                                                         {/* BOTÓN ENVIAR QR CORREGIDO */}
@@ -508,7 +508,7 @@ export default function Dashboard() {
                                                             rel="noreferrer"
                                                             className="flex-1 bg-white text-black py-3 rounded-xl text-xs font-black uppercase tracking-wider text-center hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
                                                         >
-                                                            🎟️ Enviar QR
+                                                            Enviar QR
                                                         </a>
                                                     </div>
                                                 ) : (
