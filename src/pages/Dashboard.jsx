@@ -395,7 +395,7 @@ export default function Dashboard() {
                                             {/* BOTÓN ENVIAR QR CORREGIDO */}
                                             <a
                                                 href={`https://wa.me/${invitado.telefono.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                                                    `¡Hola ${invitado.nombre}! 🥳\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n👇👇👇\n${window.location.origin}/ticket/${encodeURIComponent(invitado.nombre)}`
+                                                    `¡Hola ${invitado.nombre}! \n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n${window.location.origin}/ticket/${encodeURIComponent(invitado.nombre)}`
                                                 )}`}
                                                 target="_blank"
                                                 rel="noreferrer"
@@ -503,7 +503,7 @@ export default function Dashboard() {
                                                         {/* BOTÓN ENVIAR QR CORREGIDO */}
                                                         <a
                                                             href={`https://wa.me/${invitado.telefono.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                                                                `¡Hola ${invitado.nombre}! 🥳\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n👇👇👇\n${window.location.origin}/ticket/${encodeURIComponent(invitado.nombre)}`
+                                                                `¡Hola ${invitado.nombre}!\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n${window.location.origin}/ticket/${encodeURIComponent(invitado.nombre)}`
                                                             )}`}
                                                             target="_blank"
                                                             rel="noreferrer"
