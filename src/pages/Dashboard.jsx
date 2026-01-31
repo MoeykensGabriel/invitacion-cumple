@@ -392,15 +392,16 @@ export default function Dashboard() {
                                             </a>
 
                                             {/* BOTÓN ENVIAR QR (Premium) */}
+                                            {/* BOTÓN ENVIAR QR CORREGIDO */}
                                             <a
                                                 href={`https://wa.me/${invitado.telefono.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                                                    `¡Hola ${invitado.nombre}! 🥳\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n👇👇👇\nhttps://alejo-fest.vercel.app/ticket/${encodeURIComponent(invitado.nombre)}`
+                                                    `¡Hola ${invitado.nombre}! 🥳\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n👇👇👇\n${window.location.origin}/ticket/${encodeURIComponent(invitado.nombre)}`
                                                 )}`}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="flex-1 bg-white text-black py-3 rounded-xl text-xs font-black uppercase tracking-wider text-center hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
                                             >
-                                                Enviar QR
+                                                🎟️ Enviar QR
                                             </a>
                                         </div>
                                     )}
@@ -499,15 +500,16 @@ export default function Dashboard() {
                                                         </a>
 
                                                         {/* BOTÓN ENVIAR QR (Premium) */}
+                                                        {/* BOTÓN ENVIAR QR CORREGIDO */}
                                                         <a
                                                             href={`https://wa.me/${invitado.telefono.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                                                                `¡Hola ${invitado.nombre}! 🥳\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n👇👇👇\nhttps://alejo-fest.vercel.app/ticket/${encodeURIComponent(invitado.nombre)}`
+                                                                `¡Hola ${invitado.nombre}! 🥳\n\nYa estás en la lista. Acá tenés tu *ENTRADA DIGITAL* para el 15 de Marzo.\n\nHacé clic en el link y guardá la captura del QR para entrar:\n👇👇👇\n${window.location.origin}/ticket/${encodeURIComponent(invitado.nombre)}`
                                                             )}`}
                                                             target="_blank"
                                                             rel="noreferrer"
                                                             className="flex-1 bg-white text-black py-3 rounded-xl text-xs font-black uppercase tracking-wider text-center hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
                                                         >
-                                                            Enviar QR
+                                                            🎟️ Enviar QR
                                                         </a>
                                                     </div>
                                                 ) : (
