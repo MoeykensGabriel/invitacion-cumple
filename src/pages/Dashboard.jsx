@@ -499,7 +499,6 @@ export default function Dashboard() {
                                                             Chat
                                                         </a>
 
-                                                        {/* BOTÓN ENVIAR QR (Premium) */}
                                                         {/* BOTÓN ENVIAR QR CORREGIDO */}
                                                         <a
                                                             href={`https://wa.me/${invitado.telefono.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
