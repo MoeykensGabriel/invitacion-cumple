@@ -11,17 +11,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta principal: La pantalla de "¿Quién sos?" */}
         <Route path="/" element={<Login />} />
-
-        {/* Ruta de la fiesta (donde irán después de poner el nombre) */}
         <Route path="/invitacion" element={<Invitacion />} />
         <Route path="/gracias" element={<Gracias />} />
-
-        {/* Ruta del administrador */}
-
         <Route path="/admin" element={<Dashboard />} />
         <Route path="/ticket/:nombre" element={<Ticket />} />
+        <Route path="/access-control/:nombre" element={<ControlAcceso />} />
       </Routes>
     </BrowserRouter>
   );

@@ -50,7 +50,9 @@ export default function Ticket() {
                                 <QRCode
                                     size={256}
                                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                    value={nombreDecodificado}
+                                    // ANTES: value={nombreDecodificado}
+                                    // AHORA: Es un LINK a la página de control de acceso
+                                    value={`${window.location.origin}/access-control/${encodeURIComponent(nombreDecodificado)}`}
                                     viewBox={`0 0 256 256`}
                                 />
                             </div>
